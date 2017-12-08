@@ -25,8 +25,6 @@ gem 'redis-rack-cache', '2.0.1'
 
 gem 'rack-attack', '5.0.1'
 
-gem 'sidekiq', '4.2.10'
-
 gem 'whenever', :require => false
 
 group :development, :test do

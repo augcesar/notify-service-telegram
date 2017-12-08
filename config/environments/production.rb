@@ -32,6 +32,13 @@ Rails.application.configure do
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
+  config.telegram_updates_controller.session_store = :redis_store,     { expires_in: 6.hour}
+  config.cache_store = :redis_store, 'redis://127.0.0.1:6379/0/cache', { expires_in: 6.hour, namespace: "notify_service" }
+  config.action_dispatch.rack_cache = {
+    metastore: "redis://127.0.0.1:6379/0/metastore",
+    entitystore: "redis://127.0.0.1:6379/0/entitystore"
+  }
+
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
 
