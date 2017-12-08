@@ -16,6 +16,7 @@ gem 'puma', '3.11.0'
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'telegram-bot'
+gem 'telegram-bot-types'
 
 gem 'redis',            '3.3.3'
 gem 'redis-namespace',  '1.5.3'
