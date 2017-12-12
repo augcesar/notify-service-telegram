@@ -18,9 +18,10 @@ gem 'telegram-bot'
 gem 'telegram-bot-types'
 
 gem 'redis',            '3.3.3'
-gem 'redis-namespace',  '1.5.3'
+gem 'redis-namespace',  '1.6.0'
 gem 'redis-rails',      '5.0.2'
-gem 'redis-rack-cache', '2.0.1'
+gem 'redis-store',      '1.4.1'
+gem 'redis-rack-cache', '2.0.2'
 
 gem 'rack-attack', '5.0.1'
 
