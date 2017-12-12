@@ -1,11 +1,15 @@
 class Telegram::ApiController < ApplicationController
 
-  def enviar_mensagem
+  include ReturnMessages
+  before_action :bot_authentication
+
+  def send_message
     chat_id  = params[:chat_id]
     mensagem = params[:mensagem]
 
     if chat_id.present? and mensagem.present?
-      EnviarMensagemJob.perform_later(chat_id, mensagem)
+      
+      @bot.send_message({chat_id: chat_id, text: mensagem, parse_mode: :HTML})
       return_success
     else
       return_fail 'Informe o chat e mensagem.'
@@ -13,15 +17,22 @@ class Telegram::ApiController < ApplicationController
   end
 
   private
-    def return_success
-      render(status: :ok, json:{data:{
-        status: 200, code: "ok", title:"Ok"
-      }})      
-    end
 
-    def return_fail message
-      render(status: :bad_request, json:{errors:[{
-        status: 400, code:"bad_request", title:"Bad Request", response: message
-      }]})
+    def bot_authentication
+      token_api = params[:token_api]
+      key_bot   = ''
+
+      begin
+        tokens  = Rails.cache.fetch("TOKENS/API/#{Rails.env}", expires_in: 10.seconds) { YAML.load_file(Rails.root.join('config/secrets.yml'))[Rails.env]['telegram']['bots'] }
+        key_bot = tokens.select{|_,y| y["token_api"] == token_api }.keys.last.to_sym
+        
+        if key_bot.present?
+          @bot = Telegram.bots[key_bot]
+        else
+          raise Exception 
+        end
+      rescue Exception => e
+        return_fail 'Token não encontrado'
+      end
     end
 end
